@@ -1,4 +1,5 @@
 1/ Find top k elements from max heap
-2/ Find all permutations of a character set
-3/ Roman to Decimal number conversion
+2/ Roman to Decimal number conversion
+3/ 8 queens problem
+4/ n choose k
 
