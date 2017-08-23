@@ -19,3 +19,6 @@ def compress(s):
 	return compressed
 
 print(compress("aaabbbbbcccddeeeee"))
+print(compress("aaaaaaa"))
+print(compress("a"))
+print(compress("abcdef"))
