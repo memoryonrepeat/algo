@@ -1,42 +1,48 @@
 # IDEA: Use hashmap with key = pattern character, value = substring of input
 # Use DFS to search for the matching.
 	
+import copy
+
 def check(pattern, input):
 	if len(input)<len(pattern):
 		return False
-	if backtrack({}, pattern, input, ""):
+	letters = []
+	for char in pattern:
+		if not char in letters:
+			letters.append(char)
+	if backtrack({}, pattern, input, 0, letters):
 		return True
 	return False
 
-def backtrack(hashmap, pattern, input, mapresult):
-	# base
-	if len(input)<len(pattern):
-		return False
-	elif len(input)==len(pattern):
-		if len(input)==0:
+# letters = letters yet to be matched
+def backtrack(hashmap, pattern, input, start, letters):
+	# base case
+	print(hashmap, start, letters)
+	if not letters:
+		mapping_result = ""
+		for char in pattern:
+			mapping_result += hashmap[char]
+		if mapping_result == input:
+			print(hashmap, start, letters, True)
 			return True
 		return False
-
-	# backtrack
-	for i,char in enumerate(pattern):
-		if char in hashmap:
-			if backtrack(hashmap, pattern[i:], input[len(hashmap[char]):], mapresult+hashmap[char]):
-				return True
+	else:
+		if start == len(input):
+			return False
 		else:
-			for j in range(len(input)):
-				hashmap[char] = input[:j]
-				if backtrack(hashmap, pattern[i:], input[j:], mapresult+hashmap[char]):
-					return True
+			# backtrack
+			for char in letters:
+				new_letters = [c for c in letters if c!=char]
+				for i in range(start+1,len(input)+1):
+					new_hashmap = copy.deepcopy(hashmap)
+					new_hashmap[char]=input[start:i]
+					if backtrack(new_hashmap, pattern, input, i, new_letters):
+						return True
 	return False
 
-def isMatch(hashmap, pattern, input):
-	test = pattern
-	for key in hashmap:
-		test = test.replace(key, hashmap[key])
-	return test==input
+pattern = 'abac'
 
-pattern = 'abba'
-
-input = 'redbluebluered'
+input = 'rrkkrrt'
+# input = 'xml'
 
 print(check(pattern, input))
