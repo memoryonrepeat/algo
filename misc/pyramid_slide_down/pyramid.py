@@ -20,12 +20,14 @@
 #   [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23],
 #   ]), 1074)
 
+dp_table = {}
 
-# NOTE: May consider using dynamic programming to optimize
 def longest_slide_down(pyramid, starting):
     if len(pyramid)==1:
-        return max(pyramid[0][starting:starting+2])
-    return max(pyramid[0][starting]+longest_slide_down(pyramid[1:],starting),pyramid[0][starting]+longest_slide_down(pyramid[1:],starting+1))
+      return max(pyramid[0][starting:starting+2])
+    if (len(pyramid),starting) not in dp_table:
+      dp_table[len(pyramid),starting] = max(pyramid[0][starting]+longest_slide_down(pyramid[1:],starting),pyramid[0][starting]+longest_slide_down(pyramid[1:],starting+1))
+    return dp_table[(len(pyramid),starting)]
 
 pyramid = [
                               [75],
@@ -59,5 +61,5 @@ pyramid2 = [
     [8, 5, 9, 3]
 ]
 
-print(longest_slide_down(pyramid1,0))
+print(longest_slide_down(pyramid,0))
 
