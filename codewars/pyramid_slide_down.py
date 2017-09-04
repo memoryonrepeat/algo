@@ -22,6 +22,7 @@
 #   [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23],
 #   ]), 1074)
 
+#Solution 1: Top down DP - build the DP table on the go - more intuitive but maybe more costly
 def backtrack(pyramid, starting, dp_table):
     if len(pyramid)==1:
       return pyramid[0][starting]
@@ -33,7 +34,22 @@ def longest_slide_down(pyramid):
     dp_table = {}
     return backtrack(pyramid,0,dp_table)
 
-print(longest_slide_down(pyramid))
+# Solution 2: Bottom up DP - pre-build the DP table
+def longest_slide_down2(pyramid):
+  last_row = pyramid.pop()
+  best_slide = []
+  while pyramid:
+    row_above = pyramid.pop()
+    # print(last_row, row_above, pyramid)
+    for i in range(len(row_above)):
+      row_above[i] = row_above[i] + max(last_row[i], last_row[i+1])
+    best_slide.append(row_above)
+    last_row = row_above
+  return best_slide[len(pyramid)-1][0]
+
+pyramid = [[3], [7, 4], [2, 4, 6], [8, 5, 9, 3]]
+
+print(longest_slide_down2(pyramid))
 
 
 
