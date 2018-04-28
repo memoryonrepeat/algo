@@ -1,0 +1,15 @@
+{
+  "name": "kraken-crypto-payments-hiring-test-v1.3.0",
+  "version": "1.0.0",
+  "description": "Crypto transaction filtering and summarizing app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thanh Nguyen <tienthanh8490@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "mongodb": "^3.0.7"
+  }
+}
