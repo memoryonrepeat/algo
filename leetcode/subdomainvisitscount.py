@@ -7,7 +7,6 @@ class Solution:
             subs = domain.split(".")
             for i in range(0, len(subs)):
                 current_sub = ".".join(subs[i:])
-                print(current_sub)
                 if current_sub in res:
                     res[current_sub] += int(count)
                 else:
