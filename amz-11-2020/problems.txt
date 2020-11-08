@@ -1,0 +1,2 @@
+Prob 1: Find starting index of biggest increasing contiguous subarray in an array --> Just loop through array and update global optima when needed -> O(N)
+Prob 2: Given 2 OCR generated strings with continuous missing chars encoded as numbers i.e 'A2Le' --> Can be 'AppLe' or 'AmpLe' . Check if these two can come from original string or not --> Build a dict for each string with fixed index at fixed char --> compare 2 dicts, if there are conflict then false, else true (compare the constraints)
