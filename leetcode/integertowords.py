@@ -41,12 +41,12 @@ class Solution:
 
         if number<10:
             return single[number]
-        if number==10:
+        if number < 100 and number%10 == 0:
             return tens[number]
         if number<20:
             return teens[number]
         if number<100:
-            return tens[((number%100)//10)*10] + ' ' + single[number%10] if number%10!=0 else tens[((number%100)//10)*10]
+            return self.numberToWords((number//10)*10) + ' ' + self.numberToWords(number%10)
         if number<1000:
             return self.numberToWords(number//100) + ' Hundred ' + self.numberToWords(number%100) if number%100!=0 else self.numberToWords(number//100) + ' Hundred'
         if number<1000000:
