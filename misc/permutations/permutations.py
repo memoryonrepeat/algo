@@ -1,9 +1,9 @@
 def permutations1(head, tail=''):
   if len(head) == 0:
-    print 'result->', tail
+    print('result->', tail)
   else:
     for i in range(len(head)):
-      print head[0:i], head[i + 1:], tail + head[i]  # tracing recursion tree
+      print(head[0:i], head[i + 1:], tail + head[i])  # tracing recursion tree
       permutations1(head[0:i] + head[i + 1:], tail + head[i])
 
 
@@ -21,6 +21,21 @@ def permutations2(s):
 
   return result
 
+# Using backtracking to push/pop elements before/after recursive calls
+def permutations3(l):
+  def dfs(candidates, currentPath, result):
+    if len(currentPath) == len(l):
+      result.append(currentPath[:])
+      return
+    
+    for i, c in enumerate(candidates):
+      currentPath.append(c)
+      dfs(candidates[:i]+candidates[i+1:], currentPath, result)
+      currentPath.pop()
 
-permutations1('abcd')
-print permutations2('abcd')
+    return result
+  return dfs(l, [], [])
+
+#permutations1('abcd')
+print(permutations2('abcd'), len(permutations2('abcd')))
+print(permutations3(['a','b','c','d']), len(permutations3(['a','b','c','d'])))
