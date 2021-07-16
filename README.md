@@ -1,1 +1,1 @@
-Just brain exercises
+Algorithmic stuff
