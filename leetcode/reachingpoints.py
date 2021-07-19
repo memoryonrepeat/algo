@@ -1,4 +1,5 @@
-# https://leetcode.com/problems/reaching-points/
+# https://leetcode.com/problems/reaching-points/submissions/
+
 class Solution(object):
     def reachingPoints(self, sx, sy, tx, ty):
         while tx >= sx and ty >= sy:
