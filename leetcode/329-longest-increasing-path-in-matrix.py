@@ -24,5 +24,6 @@ class Solution:
                         continue
                     if matrix[next_i][next_j] > matrix[i][j]:
                         res = max(res, 1 + self.dp(matrix, next_i, next_j, dp_table))
+        dp_table[i][j] = res
         return res
         
