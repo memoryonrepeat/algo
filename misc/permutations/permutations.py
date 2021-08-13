@@ -37,5 +37,5 @@ def permutations3(l):
   return dfs(l, [], [])
 
 #permutations1('abcd')
-print(permutations2('abcd'), len(permutations2('abcd')))
-print(permutations3(['a','b','c','d']), len(permutations3(['a','b','c','d'])))
+# print(permutations2('abcd'), len(permutations2('abcd')))
+print(permutations3(['a', 'a','b','a','c']), len(permutations3(['a','a','b','a','c'])))
