@@ -1,38 +1,27 @@
-# def _generate_strings(seed):
-#   seed.sort()
-#   answer = []
+s = [c for c in input()]
 
-#   def backtrack(s):
-#     if len(s) <= 1:
-#       return s
-#     for i,c in enumerate(s):
-#       localResult = s[:i] + 
-      
-#   backtrack(seed)
+s.sort()
 
-#   return ans
+combinations = []
 
-def generate_strings(s):
-  if len(s) == 1:
-    return s
-
-  result = []  # resulting list
-  for i in range(len(s)):
-    remaining_permutations = generate_strings(s[i+1:])  # permutations of sublist
-
-    for permutation in remaining_permutations:
-      # print(s[:i],permutation)
-      result.append(s[:i+1] + permutation)
-
-  return result
-
-def main():
-  seed = input()
-  seed = ''.join(sorted(s))
-  allStrings = generate_strings(seed)
-  print(len(allStrings))
-  for string in allStrings:
-    print(string)
+def solve(current, remaining):
+  if not remaining:
+    combinations.append(current)
+    return
   
-if __name__ == "__main__":
-  main()
+  # Intuition:
+  # To generate the combinations, we generate a DFS tree and collect the leaves
+  # However there are lots of duplications due to the same char potentially being chosen repeatedly at each level
+  # Therefore, before going deeper, we make sure that the options at each level are unique
+  for c in set(remaining):
+    i = remaining.index(c)
+    solve(current + c, remaining[:i] + remaining[i+1:])
+
+solve('', s)
+
+combinations = combinations
+
+print(len(combinations))
+
+for c in combinations:
+  print(c)
