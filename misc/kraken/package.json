@@ -10,6 +10,6 @@
   "author": "Thanh Nguyen <tienthanh8490@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "mongodb": "^3.0.7"
+    "mongodb": "^3.7.3"
   }
 }
