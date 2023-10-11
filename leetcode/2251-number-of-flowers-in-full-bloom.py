@@ -1,8 +1,19 @@
 # https://leetcode.com/problems/number-of-flowers-in-full-bloom/
-import bisect
 
-# Using binary search to find the right place, true but TLE
+# Use single array for binary search --> AC
 class Solution:
+    def fullBloomFlowers(self, flowers: List[List[int]], people: List[int]) -> List[int]:
+        sortedByStart = sorted(list(map(lambda f: f[0], flowers)))
+        sortedByEnd = sorted(list(map(lambda f: f[1]+1, flowers)))
+        result = []
+        for p in people:
+            started_blooming = bisect_right(sortedByStart, p)
+            ended_blooming = bisect_right(sortedByEnd, p)
+            result.append(started_blooming - ended_blooming)
+        return result
+
+# Initial solution, same idea but TLE
+class _Solution:
     def fullBloomFlowers(self, flowers: List[List[int]], people: List[int]) -> List[int]:
         sortedByStart = sorted(flowers, key = lambda f: f[0])
         result = []
