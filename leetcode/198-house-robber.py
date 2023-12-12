@@ -38,3 +38,20 @@ class Solution:
         dp(len(nums)-2)
             
         return self.result
+
+# Solution 3 (2023) - straightforward top down DP, use support function to work with cache (can't use mutable list as hash key)
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+
+        @lru_cache(maxsize=None)
+        def dp(start):
+            if not nums[start:]:
+                return 0
+            if len(nums[start:]) == 1:
+                return nums[start]
+            result = float('-inf')
+            for i in range(0, len(nums[start:])):
+                result = max(result, nums[start+i] + dp(start+i+2))
+            return result
+
+        return dp(0)
