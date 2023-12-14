@@ -17,3 +17,20 @@ class Solution:
     
     def minPathSum(self, grid: List[List[int]]) -> int:
         return self.dfs(0,0,len(grid)-1,len(grid[0])-1, grid, {})
+
+# More concise solution - 2023
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        directions = [(0,1), (1,0)]
+        m = len(grid)
+        n = len(grid[0])
+
+        @lru_cache(maxsize=None)
+        def dp(x,y):
+            if x>=m or y>=n:
+                return 200*200
+            if x==m-1 and y==n-1:
+                return grid[x][y]
+            return min(list(map(lambda d: grid[x][y] + dp(x+d[0], y+d[1]) , directions)))
+
+        return dp(0,0)
