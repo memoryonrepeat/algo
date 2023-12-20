@@ -16,3 +16,15 @@ class Solution:
             sell += 1
 
         return bestProfit
+
+# Redo 20/12/23
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        minSoFar = prices[0]
+        profit = 0
+        for price in prices:
+            minSoFar = min(price, minSoFar)
+            if price - minSoFar >= profit:
+                profit = price - minSoFar
+
+        return profit
