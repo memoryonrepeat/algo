@@ -31,3 +31,23 @@ class Solution:
         backtrack(candidates, target, [], fingerprint)
         
         return ans
+
+# Redo 3/1/024
+# Instead of keeping track of uniqueness using set + fingerprint, use incremental index
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        ans = []
+        
+        def backtrack(target, current, start):
+            if target == 0:
+                ans.append(current[:])
+                return
+            for i in range(start, len(candidates)):
+                if candidates[i] <= target:
+                    current.append(candidates[i])
+                    backtrack(target - candidates[i], current, i) # current index might still be reused
+                    current.remove(candidates[i])
+                    
+        backtrack(target, [], 0)
+        
+        return ans
