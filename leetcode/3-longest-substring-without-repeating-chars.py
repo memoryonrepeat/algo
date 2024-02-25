@@ -16,4 +16,23 @@ class Solution:
             current = s[left:right]
             longest = max(longest, len(current))
         return longest
+
+# Redo 25/2/24            
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        i = 0
+        maxLength = 0
+        current = ""
+        
+        while i < len(s):
+            if s[i] not in current:
+                current += s[i]
+                i += 1
+            else:
+                maxLength = max(maxLength, len(current))
+                i = i - len(current) + current.index(s[i]) + 1
+                current = ""
             
+        maxLength = max(maxLength, len(current))
+        
+        return maxLength
