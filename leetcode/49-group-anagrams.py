@@ -9,3 +9,12 @@ class Solution:
             else:
                 table[chars].append(word)
         return table.values()
+
+# Redo 25/2/24
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        baseAnagrams = defaultdict(list)
+        for s in strs:
+            baseAnagrams[''.join(sorted(s))].append(s)
+        return baseAnagrams.values()
+                
