@@ -51,3 +51,24 @@ class Solution:
         backtrack(target, [], 0)
         
         return ans
+
+# Redo 28/2/24
+# Instead of backtracking in between adding / removing candidate, just put updated candidate as parameter
+# Feels more natural and less mental overhead since no need to manually keep track of adding / removing
+# thanks to the closure nature of recursion call (updated param of one call does not affect other calls)
+# Can be used as a template as well.
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        ans = []
+        
+        def backtrack(target, current, start):
+            if target == 0:
+                ans.append(current[:])
+                return
+            for i in range(start, len(candidates)):
+                if candidates[i] <= target:
+                    backtrack(target - candidates[i], current + [candidates[i]], i)
+                    
+        backtrack(target, [], 0)
+        
+        return ans
