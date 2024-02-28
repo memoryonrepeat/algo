@@ -10,7 +10,7 @@ class Solution:
                 return
             for i, num in enumerate(pool):
                 backtrack(pool[:i]+pool[i+1:], current+[num])
-            
+                
         backtrack(nums, [])
         
         return self.result
