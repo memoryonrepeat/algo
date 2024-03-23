@@ -24,5 +24,15 @@ class Solution:
         
         return self.dp[l1][l2]
             
-        
-        
+# Redo 23/3/24
+class Solution:
+    @lru_cache(maxsize=None)
+    def minDistance(self, word1: str, word2: str) -> int:
+        if word1 == word2:
+            return 0
+        if not word1 or not word2:
+            return max(len(word1), len(word2))
+        if word1[0] == word2[0]:
+            return 1 + min( self.minDistance(word1[1:], word2[1:])-1, self.minDistance(word1, word2[1:]), self.minDistance(word1[1:], word2))
+        else:
+            return 1 + min( self.minDistance(word1[1:], word2[1:]), self.minDistance(word1, word2[1:]), self.minDistance(word1[1:], word2))
