@@ -15,6 +15,7 @@ class Cron:
 		# Allow redundant whitespace for formatting
 		self.items = list(filter(lambda item: len(item)>0 , self.expression.split(" ")))
 
+		# Only allow 5 time + 1 command
 		if len(self.items) != 6:
 			raise Exception("Field length invalid")
 
@@ -54,14 +55,15 @@ class Cron:
 		else:
 			return []
 
-	def parse(self, expression, valueRange, *args):
+	# Util function to parse each time field
+	def parse(self, expression, valueRange):
 		if not expression:
 			return []
 
 		lists = expression.split(LIST_SEPARATOR)
 
 		if len(lists) > 1:
-			return sorted(set([minute for l in lists for minute in self.parse(l, valueRange, *args)]))
+			return sorted(set([minute for l in lists for minute in self.parse(l, valueRange)]))
 
 		interval, step = None, None
 
