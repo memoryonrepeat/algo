@@ -1,5 +1,6 @@
 from string import Template
 import unittest
+import sys
 
 LIST_SEPARATOR = ","
 RANGE_SEPARATOR = "-"
@@ -200,5 +201,9 @@ class TestSum(unittest.TestCase):
 			"Should parse mix of range / step / list correctly"
 		)
 
-if __name__ == '__main__':
-	unittest.main()
+def main():
+	Cron(sys.argv[1], True)
+
+if __name__ == "__main__":
+	main()
+	unittest.main(argv=['first-arg-is-ignored'], exit=False)
