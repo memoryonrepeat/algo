@@ -6,6 +6,14 @@ LIST_SEPARATOR = ","
 RANGE_SEPARATOR = "-"
 STEP_SEPARATOR = "/"
 ANY = "*"
+TEMPLATE = "\
+minute        $minute\n\
+hour          $hour\n\
+day of month  $dayOfMonth\n\
+month         $month\n\
+day of week   $dayOfWeek\n\
+command       $command\n\
+"
 
 class Cron:
 	def __init__(self, expression, toPrint = False):
@@ -29,14 +37,7 @@ class Cron:
 		}
 
 		self.result = {}
-		self.report = Template("\
-		minute        $minute\n\
-		hour          $hour\n\
-		day of month  $dayOfMonth\n\
-		month         $month\n\
-		day of week   $dayOfWeek\n\
-		command       $command\n\
-		")
+		self.report = Template(TEMPLATE)
 
 		self.generateResult()
 		self.generateReport()
