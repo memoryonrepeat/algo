@@ -120,6 +120,7 @@ class Cron:
 			print(self.report)
 
 class TestSum(unittest.TestCase):
+	maxDiff = None
 
 	def test_handling_redundant_white_spaces(self):
 		c = Cron(" 0    1 2   3   4   whoami  ")
@@ -182,6 +183,21 @@ class TestSum(unittest.TestCase):
 				"minute": [i for i in range(60)],
 				"hour": [i for i in range(24)],
 				"dayOfMonth": [5,6,7,8,9],
+				"month": [i for i in range(1,13)],
+				"dayOfWeek": [i for i in range(7)],
+				"command": "whoami"
+			},
+			"Should parse range correctly"
+		)
+
+	def test_parse_step(self):
+		c = Cron("* * */7 * * whoami")
+		self.assertEqual(
+			c.result,
+			{
+				"minute": [i for i in range(60)],
+				"hour": [i for i in range(24)],
+				"dayOfMonth": [1,8,15,22,28],
 				"month": [i for i in range(1,13)],
 				"dayOfWeek": [i for i in range(7)],
 				"command": "whoami"
