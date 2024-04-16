@@ -205,8 +205,10 @@ class TestSum(unittest.TestCase):
 		)
 
 def main():
+	if len(sys.argv) != 2:
+		raise Exception("Incorrect number of arguments")
 	Cron(sys.argv[1], True)
 
 if __name__ == "__main__":
 	main()
-	unittest.main(argv=['first-arg-is-ignored'], exit=False)
+	unittest.main(argv=['dummy-workaround'], exit=False)
