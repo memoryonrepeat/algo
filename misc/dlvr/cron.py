@@ -119,7 +119,7 @@ class Cron:
 		if self.toPrint:
 			print(self.report)
 
-class TestSum(unittest.TestCase):
+class Test(unittest.TestCase):
 	maxDiff = None
 
 	def test_handling_redundant_white_spaces(self):
@@ -197,7 +197,7 @@ class TestSum(unittest.TestCase):
 			{
 				"minute": [i for i in range(60)],
 				"hour": [i for i in range(24)],
-				"dayOfMonth": [1,8,15,22,28],
+				"dayOfMonth": [1,8,15,22,29],
 				"month": [i for i in range(1,13)],
 				"dayOfWeek": [i for i in range(7)],
 				"command": "whoami"
