@@ -8,11 +8,13 @@ class Solution:
         visited = set()
         time_passed = 0
         neighbors = deque([])
+        fresh_oranges = 0
 
         def bfs():
             nonlocal time_passed
+            nonlocal fresh_oranges
+            
             while neighbors:
-                print("neighbors", neighbors)
                 x,y,prev = neighbors.popleft()
 
                 if (x,y) in visited:
@@ -23,6 +25,9 @@ class Solution:
                 if grid[x][y] != 2:
                     grid[x][y] = 2
                     time_passed = max(time_passed, prev+1)
+                    fresh_oranges -= 1
+                    if fresh_oranges == 0:
+                        break
 
                 for dx,dy in directions:
                     if 0<=x+dx<m and 0<=y+dy<n and grid[x+dx][y+dy] == 1:
@@ -30,14 +35,14 @@ class Solution:
 
         for i in range(m):
             for j in range(n):
-                if grid[i][j] == 2:
+                if grid[i][j] == 1:
+                    fresh_oranges += 1
+                elif grid[i][j] == 2:
                     neighbors.append([i,j,0])
 
         bfs()
 
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    return -1
+        if fresh_oranges > 0:
+            return -1
         
         return time_passed
