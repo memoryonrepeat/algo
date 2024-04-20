@@ -12,35 +12,83 @@ hour          $hour\n\
 day of month  $dayOfMonth\n\
 month         $month\n\
 day of week   $dayOfWeek\n\
+year          $year\n\
 command       $command\n\
 "
+DAY_MAPPING = {
+	"MON": "0",
+	"TUE": "1",
+	"WED": "2",
+	"THU": "3",
+	"FRI": "4",
+	"SAT": "5",
+	"SUN": "6"
+}
+MONTH_MAPPING = {
+	"JAN": "0",
+	"FEB": "1",
+	"MAR": "2",
+	"APR": "3",
+	"MAY": "4",
+	"JUN": "5",
+	"JUL": "6",
+	"AUG": "7",
+	"SEP": "8",
+	"OCT": "9",
+	"NOV": "10",
+	"DEC": "11"
+}
+
+# * * * * * /usr/bin/find -f file.txt
+
+
 
 class Cron:
 	def __init__(self, expression, toPrint = False):
-		self.expression = expression
+		self.expression = self.parseText(expression)
 		self.toPrint = toPrint
-		
+		self.hasYear = False
+
 		# Allow redundant whitespace for formatting
 		self.items = list(filter(lambda item: len(item)>0 , self.expression.split(" ")))
 
 		# Only allow 5 time + 1 command
-		if len(self.items) != 6:
-			raise Exception("Field length invalid")
+		# if len(self.items) != 6:
+		# 	raise Exception("Field length invalid")
 
-		self.fields = {
-			"minute": self.items[0],
-			"hour": self.items[1],
-			"dayOfMonth": self.items[2],
-			"month": self.items[3],
-			"dayOfWeek": self.items[4],
-			"command": self.items[5]
-		}
+		if len(self.items)>6 and self.items[6][0]=="/":
+			self.hasYear = True
+			self.fields = {
+				"minute": self.items[0],
+				"hour": self.items[1],
+				"dayOfMonth": self.items[2],
+				"month": self.items[3],
+				"dayOfWeek": self.items[4],
+				"year": self.items[5],
+				"command": " ".join(self.items[6:])
+			}
+		else:
+			self.fields = {
+				"minute": self.items[0],
+				"hour": self.items[1],
+				"dayOfMonth": self.items[2],
+				"month": self.items[3],
+				"dayOfWeek": self.items[4],
+				"command": " ".join(self.items[5:])
+			}
 
 		self.result = {}
 		self.report = Template(TEMPLATE)
 
 		self.generateResult()
 		self.generateReport()
+
+	def parseText(self, expression):
+		for k,v in DAY_MAPPING.items():
+			expression = expression.replace(k,v)
+		for k,v in MONTH_MAPPING.items():
+			expression = expression.replace(k,v)
+		return expression
 
 	def getValueRange(self, type):
 		if type == "minute":
@@ -53,6 +101,8 @@ class Cron:
 			return [i for i in range(1,13)]
 		elif type == "dayOfWeek":
 			return [i for i in range(7)]
+		elif type == "year":
+			return [i for i in range(2024, 2124)]
 		else:
 			return []
 
@@ -137,9 +187,24 @@ class Test(unittest.TestCase):
 			"Should filter out redundant whitespaces"
 		)
 
-	def test_handling_invalid_params_amount(self):
-		with self.assertRaises(Exception) as ctx:
-			Cron("0 1 2 3 4 5 6 whoami")
+	# def test_handling_invalid_params_amount(self):
+	# 	with self.assertRaises(Exception) as ctx:
+	# 		Cron("0 1 2 3 4 5 6 whoami")
+
+	def test_parse_extra_flags(self):
+		c = Cron("* * * * * /usr/bin/find -f file.txt")
+		self.assertEqual(
+			c.result,
+			{
+				"minute": [i for i in range(60)],
+				"hour": [i for i in range(24)],
+				"dayOfMonth": [i for i in range(1,32)],
+				"month": [i for i in range(1,13)],
+				"dayOfWeek": [i for i in range(7)],
+				"command": "/usr/bin/find -f file.txt"
+			},
+			"Should parse extra flags correctly"
+		)
 
 	def test_handling_invalid_range(self):
 		with self.assertRaises(Exception) as ctx:
@@ -190,6 +255,37 @@ class Test(unittest.TestCase):
 			"Should parse range correctly"
 		)
 
+	def test_parse_text(self):
+		c = Cron("* * 5-9 APR-OCT MON-FRI whoami")
+		self.assertEqual(
+			c.result,
+			{
+				"minute": [i for i in range(60)],
+				"hour": [i for i in range(24)],
+				"dayOfMonth": [5,6,7,8,9],
+				"month": [i for i in range(3,10)],
+				"dayOfWeek": [i for i in range(0,5)],
+				"command": "whoami"
+			},
+			"Should parse text correctly"
+		)
+
+	def test_parse_year(self):
+		c = Cron("* * 5-9 APR-OCT MON-FRI 2024-2030 /usr/bin/find")
+		self.assertEqual(
+			c.result,
+			{
+				"minute": [i for i in range(60)],
+				"hour": [i for i in range(24)],
+				"dayOfMonth": [5,6,7,8,9],
+				"month": [i for i in range(3,10)],
+				"dayOfWeek": [i for i in range(0,5)],
+				"year": [i for i in range(2024,2031)],
+				"command": "/usr/bin/find"
+			},
+			"Should parse year correctly"
+		)
+
 	def test_parse_step(self):
 		c = Cron("* * */7 * * whoami")
 		self.assertEqual(
@@ -221,7 +317,7 @@ class Test(unittest.TestCase):
 		)
 
 def main():
-	if len(sys.argv) != 2:
+	if len(sys.argv) < 2:
 		raise Exception("Incorrect number of arguments")
 	Cron(sys.argv[1], True)
 
