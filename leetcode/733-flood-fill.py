@@ -9,16 +9,19 @@ class Solution:
         n = len(image[0])
 
         def bfs(x,y):
+            # print(x,y)
             neighbors = deque([])
             image[x][y] = color
             visited.add((x,y))
             for dx,dy in directions:
                 if 0<=x+dx<m and 0<=y+dy<n:
-                    if image[x+dx][y+dy] == same and (x+dx,y+dy) not in visited:
+                    if image[x+dx][y+dy] == same:
                         neighbors.append([x+dx, y+dy])
+            # DFS actually
             while neighbors:
                 x,y = neighbors.popleft()
-                bfs(x,y)
+                if (x,y) not in visited:
+                    bfs(x,y)
 
         bfs(sr, sc)
         return image
