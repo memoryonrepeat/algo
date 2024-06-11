@@ -1,12 +1,16 @@
 import math
 
-INPUT_FILE = "input2.txt"
+INPUT_FILE = "input.txt"
+
+# Differences in terms of cartesian coordinate for each move
 MOVES = {
 	"NORTH": (0,1),
 	"EAST": (1,0),
 	"WEST": (-1,0),
 	"SOUTH": (0,-1)
 }
+
+# Map directions to angles on trigonometry circle to streamline calculations
 ANGLE_DIRECTION_MAP = {
 	0: "EAST",
 	90: "NORTH",
@@ -14,6 +18,8 @@ ANGLE_DIRECTION_MAP = {
 	270: "SOUTH"
 }
 DIRECTION_ANGLE_MAP = {value: key for key, value in ANGLE_DIRECTION_MAP.items()}
+
+# Using same convention from trigonometry, left movement ~ increasing angle on circle, vice versa
 ROTATION = {
 	"LEFT": 90,
 	"RIGHT": -90
@@ -29,42 +35,35 @@ class Simulation():
 	def isValid(self, x, y):
 		return 0<=x<self.width and 0<=y<self.height
 
-	def report(self):
-		if not self.robot:
-			self.logs.append("Skipped REPORT instruction - robot not on table")
-			return
-
-		print(",".join(map(str,[self.robot["x"], self.robot["y"], ANGLE_DIRECTION_MAP[self.robot["angle"]]])))
-
-	def move(self):
-		if not self.robot:
-			self.logs.append("Skipped MOVE instruction - robot not on table")
-			return
-		delta = MOVES[ANGLE_DIRECTION_MAP[self.robot["angle"]]]
-
-		nextX = self.robot["x"] + delta[0]
-		nextY = self.robot["y"] + delta[1]
-
-		if not self.isValid(nextX, nextY):
-			self.logs.append("Skipped MOVE instruction - robot would be out of bound "+self.robot)
-			return
-
-		self.robot["x"] = nextX
-		self.robot["y"] = nextY
-
 	def place(self, *args):
 		x, y, direction = args
 		x = int(x)
 		y = int(y)
 
 		if not self.isValid(x,y):
-			self.logs.append("Skipped place instruction - robot would be out of bound "+args)
+			self.logs.append("Skipped place instruction - robot would be out of bound")
 			return
 
 		self.robot["x"] = x
 		self.robot["y"] = y
 		self.robot["angle"] = DIRECTION_ANGLE_MAP[direction]
 
+	def move(self):
+		if not self.robot:
+			self.logs.append("Skipped MOVE instruction - robot not on table")
+			return
+
+		delta = MOVES[ANGLE_DIRECTION_MAP[self.robot["angle"]]]
+
+		nextX = self.robot["x"] + delta[0]
+		nextY = self.robot["y"] + delta[1]
+
+		if not self.isValid(nextX, nextY):
+			self.logs.append("Skipped MOVE instruction - robot would be out of bound")
+			return
+
+		self.robot["x"] = nextX
+		self.robot["y"] = nextY
 
 	def rotate(self, direction):
 		if not self.robot:
@@ -78,6 +77,13 @@ class Simulation():
 		coeff = math.ceil(-nextAngle/360)
 
 		self.robot["angle"] = nextAngle + coeff*360
+
+	def report(self):
+		if not self.robot:
+			self.logs.append("Skipped REPORT instruction - robot not on table")
+			return
+
+		print(",".join(map(str,[self.robot["x"], self.robot["y"], ANGLE_DIRECTION_MAP[self.robot["angle"]]])))
 
 	def simulate(self, instructions):
 		for instruction in instructions:
