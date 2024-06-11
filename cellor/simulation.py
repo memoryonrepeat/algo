@@ -26,11 +26,14 @@ ROTATION = {
 }
 
 class Simulation():
-	def __init__(self, width, height):
+	def __init__(self, width, height, printReport = True, printLog = True):
 		self.width = width
 		self.height = height
 		self.robot = {}
 		self.logs = []
+		self.status = None
+		self.printReport = printReport
+		self.printLog = printLog
 
 	def isValid(self, x, y):
 		return 0<=x<self.width and 0<=y<self.height
@@ -85,7 +88,19 @@ class Simulation():
 			self.logs.append("Skipped REPORT instruction - robot not on table")
 			return
 
-		print(",".join(map(str,[self.robot["x"], self.robot["y"], ANGLE_DIRECTION_MAP[self.robot["angle"]]])))
+		self.status = ",".join(
+			map(
+				str,
+				[
+					self.robot["x"], 
+					self.robot["y"], 
+					ANGLE_DIRECTION_MAP[self.robot["angle"]]
+				]
+			)
+		)
+
+		if self.printReport:
+			print(self.status)
 
 	def simulate(self, instructions):
 		for instruction in instructions:
@@ -104,9 +119,9 @@ class Simulation():
 			elif command == "REPORT":
 				self.report()
 			else:
-				raise Exception("Invalid command")
+				raise Exception("Invalid command", instruction)
 
-		if self.logs:
+		if self.logs and self.printLog:
 			print("----LOGS----")
 			print("\n".join(self.logs))
 
