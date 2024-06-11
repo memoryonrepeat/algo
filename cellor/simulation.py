@@ -26,7 +26,7 @@ ROTATION = {
 }
 
 class Simulation():
-	def __init__(self, width, height, printReport = True, printLog = True):
+	def __init__(self, width, height, printReport = True, printLog = False):
 		self.width = width
 		self.height = height
 		self.robot = {}
