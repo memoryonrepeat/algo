@@ -72,8 +72,10 @@ class Simulation():
 
 		nextAngle = self.robot["angle"] + ROTATION[direction]
 
-		# 0 <= r + k*360 < 360
-		# -r/360 <= k < -r/360 + 1
+		# We want to normalize the angles to between 0 and 360 degrees to map to directions later
+		# That translates to 0 <= angle + coefficient*360 < 360
+		# Which equals to -angle/360 <= coefficient < -angle/360 + 1
+		# Which means coefficient is the integer ceiling of (-angle/360)
 		coeff = math.ceil(-nextAngle/360)
 
 		self.robot["angle"] = nextAngle + coeff*360
