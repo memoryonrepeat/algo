@@ -44,7 +44,7 @@ class Simulation():
 		y = int(y)
 
 		if not self.isValid(x,y):
-			self.logs.append("Skipped place instruction - robot would be out of bound")
+			self.logs.append("Skipped PLACE instruction - robot would be out of bound")
 			return
 
 		self.robot["x"] = x
