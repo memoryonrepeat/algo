@@ -31,3 +31,27 @@ class Solution:
             global_result.append(local_result)
             local_result = []
         return global_result
+
+# Redo 7/8/2024
+from collections import defaultdict
+
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        
+        result = defaultdict(list)
+        
+        def traverse(node, level):
+            if not node:
+                return
+            
+            result[level].append(node.val)
+            
+            if node.left:
+                traverse(node.left, level+1)
+            if node.right:
+                traverse(node.right, level+1)
+                
+        traverse(root, 0)
+        
+        return result.values()
+            
