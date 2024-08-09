@@ -10,18 +10,10 @@ class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         
         def isValid(node, high, low):
-            if node.val >= high:
+            if not node:
+                return True
+            if node.val >= high or node.val <= low:
                 return False
-            if node.val <= low:
-                return False
-            if node.left:
-                isValidLeft = isValid(node.left, min(node.val, high), low)
-                if not isValidLeft:
-                    return False
-            if node.right:
-                isValidRight = isValid(node.right, high, max(node.val, low))
-                if not isValidRight:
-                    return False
-            return True
+            return isValid(node.left, node.val, low) and isValid(node.right, high, node.val)
 
         return isValid(root, math.inf, -math.inf)
