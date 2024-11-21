@@ -43,4 +43,9 @@ for _ in range(T):
 		windows.append([a,b])
 	solve(windows)
 
-print("\n".join(["Case #{i}: {r:.10f}".format(i=i+1,r=result[i]) for i in range(len(result))]))
+
+f.close()
+fw = open("result.txt", "w")
+to_write = "\n".join(["Case #{i}: {r:.10f}".format(i=i+1,r=result[i]) for i in range(len(result))])
+fw.write(to_write)
+fw.close()
